@@ -1,18 +1,188 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
-    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>云API</title>
-    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
-    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
-    <style>
-        .empty{ text-align: center; padding: 120px 0; }
-    </style>
+<title>Module Develop</title>
+<meta charset="utf-8">
+<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+<style type="text/css">
+	html,body{
+		height: 100%
+	}
+	body{
+		background-color: #fff;
+	    margin: 0;
+	}
+	#wrap{
+	    height: 100%;
+	    position: relative;
+	}
+	#header{
+		padding-top: 20px;
+		background-color: #5082c2;
+		height: 44px;
+	    position: relative;
+	}
+	#header h1{
+	    font-size: 20px;
+	    height: 44px;
+	    line-height: 44px;
+	    margin: 0em;
+	    color: #fff;
+		margin-left: 100px;
+		margin-right: 100px;
+		text-align: center;
+	}
+    #main{
+        display: block;
+    }
+    a.button{
+        display: -webkit-box;
+        -webkit-box-pack: center;
+        -webkit-box-align: center;
+        height: 36px;
+        margin: 8px;
+        background-color: rgba(240,240,240,1.0);
+        border-color: rgba(220,220,220,1.0);
+        border-width: 2px;
+        border-style: solid;
+	}
+    a.active{
+        background-color: rgba(240,240,240,0.6);
+	}
+</style>
 </head>
 <body>
-    <div class="empty">云API</div>
-    12312312313
+	<div id="wrap">
+	    <header id="header">
+	    	<h1 id="title">模块开发</h1>
+	    </header>
+	    <div id="main">
+            <a class="button" tapmode="active" onclick="takePictureAndVideoClick()">调用相机</a>
+             <a class="button" tapmode="active" onclick="takePicture()">照相</a>
+             <a class="button" tapmode="active" onclick="takeVideo()">录像</a>
+             <a class="button" tapmode="active" onclick="compressVideo()">压缩视频</a>
+
+             <a class="button" tapmode="active" onclick="captureScreen()">获取视频截图</a>
+             <a class="button" tapmode="active" onclick="getVideoInfo()">获取视频信息</a>
+             <a class="button" tapmode="active" onclick="compressImg()">压缩图片</a>
+             <a class="button" tapmode="active" onclick="getImageInfo()">获取相片信息</a>
+             </p>
+        </div>
+    </div>
 </body>
+<script>
+
+function takePicture() {
+        var camera = api.require('zxycamera');
+        camera.takePictureClick({
+         albumName:'lll'
+        },function(ret,err){
+                          alert(JSON.stringify(ret.image.imagePath));
+                                 alert(JSON.stringify(ret));
+
+                                imgPath = ret.image.imagePath;
+                           });
+}
+
+
+function takeVideo(){
+var camera = api.require('zxycamera');
+camera.takeVideoClick({
+                 voideLength:'20',
+                 albumName:'ccc'
+                 },function(ret,err){
+                 alert(JSON.stringify(ret));
+                      videoPath = ret.video.videoPath;
+                 });
+
+}
+function takePictureAndVideoClick() {
+    var camera = api.require('zxycamera');
+    camera.takePictureAndVideoClick({
+        albumName:'ccc',
+        voideLength:'20'
+
+
+    },function(ret, err){
+           alert(JSON.stringify(ret));
+
+                                    if(ret.video == ''){
+                                      imgPath = ret.image.imagePath;
+                                    }else{
+                                    imgPath = ret.image.imagePath;
+                                    videoPath = ret.video.videoPath;
+                                    }
+
+
+    });
+}
+
+
+function compressVideo() {
+    var demo = api.require('zxycamera');
+    demo.compressVideo({
+                       directories:videoPath,
+                       format:'mp4',
+                       presetName:1
+                       },function(ret,err){
+
+                       alert(JSON.stringify(ret));
+                       videoComperssPath = ret.compressPath;
+                       });
+}
+
+function captureScreen() {
+    var demo = api.require('zxycamera');
+    demo.captureScreen({
+                       path:videoPath,
+                       startTime:0
+                       },function(ret,err){
+                       alert(JSON.stringify(ret));
+                       captureScreenImgPath = ret.imgPath;
+                       });
+}
+
+function getVideoInfo() {
+    var demo = api.require('zxycamera');
+    demo.getVideoInfo({
+                      path:videoComperssPath
+                      },function(ret,err){
+                      alert(JSON.stringify(ret));
+                      });
+}
+
+function getImageInfo(){
+
+  var demo = api.require('zxycamera');
+  demo.getImageInfo({
+                    path:imgComperssPath
+
+                    },function(ret,err){
+                    alert(JSON.stringify(ret));
+                    });
+}
+
+function compressImg(){
+    var demo = api.require('zxycamera');
+    demo.compressImg({
+                       path:imgPath,
+                       compressionQuality:1
+                      },function(ret,err){
+                      alert(JSON.stringify(ret));
+                      imgComperssPath = ret.compressPath;
+                      });
+}
+
+function apiready() {
+
+    var videoPath;
+
+    var videoComperssPath;
+
+    var imgPath;
+
+    var captureScreenImgPath;
+    var imgComperssPath;
+}
+</script>
 </html>
